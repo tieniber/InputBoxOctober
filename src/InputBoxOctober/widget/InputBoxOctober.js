@@ -105,6 +105,8 @@ define([
                     mx.data.action({
                         params: {
                             actionname: this.microflowName,
+                            applyto:    "selection",
+                            guids:      [obj.getGuid()]
                         },
                         callback: function(res) {
                             // console.log(res);
