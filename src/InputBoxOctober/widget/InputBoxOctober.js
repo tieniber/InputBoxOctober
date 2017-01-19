@@ -172,7 +172,7 @@ define([
             dojoProp.set(this.inputBox, "value", "");
             if (obj != null) {
                 if (obj.get(this.name) == "") {
-                    dojoProp.set(this.inputBox, "placeholder", maskString);
+                    // dojoProp.set(this.inputBox, "placeholder", maskString);
                 } else {
                     dojoProp.set(this.inputBox, "value", this.obj.get(this.name));
                 }
