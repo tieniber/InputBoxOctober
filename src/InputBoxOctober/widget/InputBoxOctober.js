@@ -99,7 +99,7 @@ define([
                     if (this.customMaskChar && this.customMaskDef) {
                         $.mask.definitions[this.customMaskChar] = this.customMaskDef;
                     }
-                    this._setMaskText(null, this.maskString);
+                    this._setMaskText(obj, this.maskString);
                 } else if (this.useMicroflowForMask) {
                     var self = this;
                     mx.data.action({
@@ -108,7 +108,7 @@ define([
                         },
                         callback: function(res) {
                             // console.log(res);
-                            self._setMaskText(null, res);
+                            self._setMaskText(obj, res);
                         },
                         error: function(err) {
                             console.log(err);
