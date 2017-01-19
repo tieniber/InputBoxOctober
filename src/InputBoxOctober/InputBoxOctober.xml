@@ -14,6 +14,17 @@
               <attributeType name="String"/>
           </attributeTypes>
       </property>
+      <property key="useMicroflowForMask" type="boolean" required="true" defaultValue="false">
+          <caption>Use Dynamic Mask</caption>
+          <category>Settings</category>
+          <description>Use a microflow to set a dynamic mask. If you set this to true, leave "Mask" field empty, otherwise it will overwrite the value returned from the microflow.</description>
+      </property>
+      <property key="microflowName" type="microflow" required="false">
+          <caption>Mask microflow</caption>
+          <category>Settings</category>
+          <description>The microflow to Return the mask string.</description>
+          <returnType type="String"/>
+      </property>
       <property key="maskString" type="string" required="false">
           <caption>Mask</caption>
           <category>Settings</category>
