@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <widget id="InputBoxOctober.widget.InputBoxOctober" needsEntityContext="true" 
     xmlns="http://www.mendix.com/widget/1.0/">
-    <name>InputBoxOctober</name>
+    <name>Custom Input Mask</name>
     <description>Input box with options for on change MF, on leave MF, and configurable masking</description>
     <icon />
     <properties>
+        <property key="showLabel" type="boolean" required="true" defaultValue="true">
+            <caption>Show Label</caption>
+            <category>Appearance</category>
+            <description></description>
+        </property>
+        <property key="label" type="string" required="false">
+            <caption>Label</caption>
+            <category>Appearance</category>
+            <description>The Label for the input</description>
+        </property>
+        <property key="labelWidth" type="integer" required="true" defaultValue="0">
+            <caption>Label Width</caption>
+            <category>Appearance</category>
+            <description>How many (of the 12) columns should the label take up? Leave as 0 to infer the width automagically (based on the previous sibling)</description>
+        </property>
         <property key="name" type="attribute" required="true">
             <caption>Attribute</caption>
             <category>Settings</category>
@@ -38,8 +53,7 @@ In addition, use a question mark to designate optional data - anything after the
         <property key="customPH" type="string" required="false">
             <caption>Placeholder character</caption>
             <category>Customizations</category>
-            <description>Underscore is the default mask placeholder character. Define a different placeholder character here (should be just one character long, optional).
-          </description>
+            <description>Underscore is the default mask placeholder character. Define a different placeholder character here (should be just one character long, optional).          </description>
         </property>
         <property key="customMaskChar" type="string" required="false">
             <caption>Custom mask placeholder</caption>
