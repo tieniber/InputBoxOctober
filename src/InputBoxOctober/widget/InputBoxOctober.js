@@ -63,6 +63,7 @@ define([
 
         //dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function() {
+            this._clearValidations();
             this._hasStarted = true;
             this.connect(this.inputBox, "onblur", dojoLang.hitch(this, this._onLeave));
             if (this.onleavemf) {
@@ -95,6 +96,7 @@ define([
             this.obj = obj;
             if (obj !== null) {
                 dojoStyle.set(this.domNode, "display", "inline");
+                this._resetSubscriptions();
                 if (this.maskString) {
                     if (this.customMaskChar && this.customMaskDef) {
                         $.mask.definitions[this.customMaskChar] = this.customMaskDef;
@@ -105,8 +107,8 @@ define([
                     mx.data.action({
                         params: {
                             actionname: this.microflowName,
-                            applyto:    "selection",
-                            guids:      [obj.getGuid()]
+                            applyto: "selection",
+                            guids: [obj.getGuid()]
                         },
                         callback: function(res) {
                             // console.log(res);
@@ -120,7 +122,6 @@ define([
             } else {
                 dojoStyle.set(this.domNode, "display", "none");
             }
-
 
             if (callback) {
                 callback();
@@ -185,6 +186,61 @@ define([
             } else {
                 $(this.inputBox).mask(maskString);
             }
+        },
+
+        /**
+         * ResetSubscriptions
+         * ---
+         * Sets a validation and attribute subscription
+         * 
+         * @author Conner Charlebois
+         * @since Dec 11, 2017
+         */
+        _resetSubscriptions: function() {
+            this.unsubscribeAll();
+            this.subscribe({
+                guid: this.obj.getGuid(),
+                attr: this.name,
+                callback: dojoLang.hitch(this, function(guid, attr, attrValue) {
+                    // console.debug(arguments);
+                    // the GUID of the object that changed
+                    // the attribute name of the attribute whose value changed
+                    // the new value of the attribute
+                    this._clearValidations();
+                })
+            });
+            this.subscribe({
+                guid: this.obj.getGuid(),
+                val: true,
+                callback: dojoLang.hitch(this, function(validations) {
+                    // console.debug(arguments);
+                    // an array of validation objects, per object
+                    // validations[0] is the feedback
+                    // validations[0].getGuid() --> the obect guid
+                    // validations[0].getAttributes() --> the list of attributes with errors
+                    // validations[0].getReasonByAttribute({attrName}) --> the message for field `attrName`
+                    var val = validations[0],
+                        validationText = val.getReasonByAttribute(this.name);
+                    if (validationText) {
+                        this.errorNode.innerText = validationText;
+                        dojoStyle.set(this.errorNode, "display", "block");
+                    } else {
+                        this._clearValidations();
+                    }
+                })
+            });
+        },
+
+        /**
+         * Clear Validations
+         * ---
+         * Clears the validation node (this.errorNode)
+         * 
+         * @author Conner Charlebois
+         * @since Dec 11, 2017
+         */
+        _clearValidations: function() {
+            dojoStyle.set(this.errorNode, "display", "none");
         }
     });
 });
