@@ -218,6 +218,7 @@ define([
                     // the attribute name of the attribute whose value changed
                     // the new value of the attribute
                     this._clearValidations();
+                    this._updateRendering();
                 })
             });
             this.subscribe({
@@ -286,6 +287,10 @@ define([
                 dojoClass.add(this.inputsNode, "col-sm-" + (12 - this.labelWidth));
             }
 
+        },
+
+        _updateRendering: function() {
+            this.inputBox.value = this.obj.get(this.name);
         },
     });
 });
