@@ -56,7 +56,7 @@ define([
         divNode: "",
         inputBox: "",
         handle: "",
-        delay_timer: "",
+        // delay_timer: "", UNUSED
         currValue: "",
         obj: null,
         maskString: "",
@@ -74,26 +74,6 @@ define([
             if (this.onleavemf) {
                 this.connect(this.inputBox, "onfocus", dojoLang.hitch(this, this._eventInputFocus));
             }
-            if (this.maskString) {
-                if (this.customMaskChar && this.customMaskDef) {
-                    $.mask.definitions[this.customMaskChar] = this.customMaskDef;
-                }
-                this._setMaskText(null, this.maskString);
-            } else if (this.useMicroflowForMask) {
-                var self = this;
-                mx.data.action({
-                    params: {
-                        actionname: this.microflowName,
-                    },
-                    callback: function(res) {
-                        // console.log(res);
-                        self._setMaskText(null, res);
-                    },
-                    error: function(err) {
-                        console.log(err);
-                    }
-                });
-            }
             if (this.showLabel && this.label) {
                 dojoClass.add(this.domNode, "form-group");
                 this._addLabel();
@@ -105,38 +85,49 @@ define([
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function(obj, callback) {
             this.obj = obj;
-            if (obj !== null) {
-                dojoStyle.set(this.domNode, "display", "inline");
-                this._resetSubscriptions();
-                if (this.maskString) {
-                    if (this.customMaskChar && this.customMaskDef) {
-                        $.mask.definitions[this.customMaskChar] = this.customMaskDef;
+            this._maskSettings = {
+                placeholder: this.customPH ? this.customPH : undefined
+            };
+            if (this.customMaskChar && this.customMaskDef) {
+                $.mask.definitions[this.customMaskChar] = this.customMaskDef;
+            }
+            this._getMask()
+                .then(dojoLang.hitch(this, this._applyMask))
+                .then(dojoLang.hitch(this, function() {
+                    this._resetSubscriptions();
+                    if (callback) {
+                        callback();
                     }
-                    this._setMaskText(obj, this.maskString);
+                }));
+        },
+        _applyMask: function(mask) {
+            return new Promise(dojoLang.hitch(this, function(resolve) {
+                $(this.inputBox).mask(mask, this._maskSettings);
+                resolve();
+            }));
+        },
+
+        _getMask: function() {
+            return new Promise(dojoLang.hitch(this, function(resolve, reject) {
+                if (this.maskString) {
+                    resolve(this.maskString);
                 } else if (this.useMicroflowForMask) {
-                    var self = this;
                     mx.data.action({
                         params: {
                             actionname: this.microflowName,
-                            applyto: "selection",
-                            guids: [obj.getGuid()]
+                            applyto: this.obj ? "selection" : undefined,
+                            guids: this.obj ? [this.obj.getGuid()] : undefined
                         },
-                        callback: function(res) {
+                        callback: dojoLang.hitch(this, function(res) {
                             // console.log(res);
-                            self._setMaskText(obj, res);
-                        },
+                            resolve(res);
+                        }),
                         error: function(err) {
-                            console.log(err);
+                            reject(err);
                         }
                     });
                 }
-            } else {
-                dojoStyle.set(this.domNode, "display", "none");
-            }
-
-            if (callback) {
-                callback();
-            }
+            }));
         },
 
         _eventInputFocus: function() {
@@ -144,19 +135,11 @@ define([
         },
 
         _onLeave: function() {
-            if (this.maskString) {
-                $(this.inputBox).mask(this.maskString);
-            }
-            if (this.inputBox.value !== this.maskString) {
-                //if (this.obj.get(this.name) !== this.inputBox.value)
+            this._applyMask().then(dojoLang.hitch(this, function() {
                 this.obj.set(this.name, this.inputBox.value);
-                mx.data.save({
-                    mxobj: this.obj,
-                    callback: dojoLang.hitch(this, function() {})
-                });
-            }
-            this.delay_timer = null;
-            this._executeMicroflow(this.onleavemf);
+                this._executeMicroflow(this.onleavemf);
+            }));
+
         },
 
         _executeMicroflow: function(mf) {
@@ -180,23 +163,16 @@ define([
             }
         },
 
-        _setMaskText: function(obj, maskString) {
-            dojoProp.set(this.inputBox, "value", "");
-            if (obj != null) {
-                if (obj.get(this.name) == "") {
+        _updateRendering: function() {
+            // dojoProp.set(this.inputBox, "value", "");
+            if (this.obj !== null) {
+                if (this.obj.get(this.name) === "") {
                     // dojoProp.set(this.inputBox, "placeholder", maskString);
                 } else {
                     dojoProp.set(this.inputBox, "value", this.obj.get(this.name));
                 }
             }
 
-            if (this.customPH) {
-                $(this.inputBox).mask(maskString, {
-                    placeholder: this.customPH
-                });
-            } else {
-                $(this.inputBox).mask(maskString);
-            }
         },
 
         /**
@@ -287,10 +263,6 @@ define([
                 dojoClass.add(this.inputsNode, "col-sm-" + (12 - this.labelWidth));
             }
 
-        },
-
-        _updateRendering: function() {
-            this.inputBox.value = this.obj.get(this.name);
         },
     });
 });
