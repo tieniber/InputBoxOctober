@@ -21,6 +21,7 @@ typora-root-url: .
 2. Include the **Custom Input Mask** widget on a page where you'd like to display your masked string
 
 3. Configure the widget properties:
+
     ![939DA8EA-75BA-4114-954F-40D168B85023](/assets/939DA8EA-75BA-4114-954F-40D168B85023.png)
 
     - `Show Label` : Whether to display the label
