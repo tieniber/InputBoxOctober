@@ -1,3 +1,7 @@
 <div dojoAttachPoint="divNode" class="divNode">
-	<input dojoAttachPoint="inputBox" class="mendixFormView_textBox form-control">
+    <label data-dojo-attach-point="labelNode" class="control-label" for=""></label>
+    <div data-dojo-attach-point="inputsNode">
+        <input dojoAttachPoint="inputBox" class="mendixFormView_textBox form-control">
+        <div class="alert alert-danger" data-dojo-attach-point="errorNode">Hello World</div>
+    </div>
 </div>

@@ -1,56 +1,84 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<widget id="InputBoxOctober.widget.InputBoxOctober" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
-    <name>InputBoxOctober</name>
+<widget id="InputBoxOctober.widget.InputBoxOctober" needsEntityContext="true" 
+    xmlns="http://www.mendix.com/widget/1.0/">
+    <name>Custom Input Mask</name>
     <description>Input box with options for on change MF, on leave MF, and configurable masking</description>
-
     <icon />
-
     <properties>
-      <property key="name" type="attribute" required="true">
-          <caption>Attribute</caption>
-          <category>Settings</category>
-          <description>The entity attribute to display.</description>
-          <attributeTypes>
-              <attributeType name="String"/>
-          </attributeTypes>
-      </property>
-      <property key="maskString" type="string" required="false">
-          <caption>Mask</caption>
-          <category>Settings</category>
-          <description>Define your mask here.
+        <property key="showLabel" type="boolean" required="true" defaultValue="true">
+            <caption>Show Label</caption>
+            <category>Appearance</category>
+            <description></description>
+        </property>
+        <property key="label" type="string" required="false">
+            <caption>Label</caption>
+            <category>Appearance</category>
+            <description>The Label for the input</description>
+        </property>
+        <property key="labelWidth" type="integer" required="true" defaultValue="0">
+            <caption>Label Width</caption>
+            <category>Appearance</category>
+            <description>How many (of the 12) columns should the label take up? Leave as 0 to infer the width automagically (based on the previous sibling)</description>
+        </property>
+        <property key="editable" type="boolean" defaultValue="true">
+          <caption>Editable</caption>
+          <category>Appearance</category>
+          <description></description>
+        </property>
+        <property key="name" type="attribute" required="true">
+            <caption>Attribute</caption>
+            <category>Settings</category>
+            <description>The entity attribute to display.</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        <property key="useMicroflowForMask" type="boolean" required="true" defaultValue="false">
+            <caption>Use Dynamic Mask</caption>
+            <category>Settings</category>
+            <description>Use a microflow to set a dynamic mask. If you set this to true, leave "Mask" field empty, otherwise it will overwrite the value returned from the microflow.</description>
+        </property>
+        <property key="microflowName" type="microflow" required="false">
+            <caption>Mask microflow</caption>
+            <category>Settings</category>
+            <description>The microflow to Return the mask string.</description>
+            <returnType type="String"/>
+        </property>
+        <property key="maskString" type="string" required="false">
+            <caption>Mask</caption>
+            <category>Settings</category>
+            <description>Define your mask here.
 
 'a' represents an alphabet character (A-Z, a-z), '9' represents a numeric character (0-9), and '*'' represents both (A-Z, a-z, 0-9).
 
 Any other character will be part of the mask; for example, '(999) 999-9999' will only allow you to enter numbers, and the mask will display the parentheses and hyphen between the third and fourth characters.
 
 In addition, use a question mark to designate optional data - anything after the question mark is optional. For example '(999) 999-9999? x99999' will capture an optional 5-digit telephone extension.</description>
-      </property>
-      <property key="customPH" type="string" required="false">
-          <caption>Placeholder character</caption>
-          <category>Customizations</category>
-          <description>Underscore is the default mask placeholder character. Define a different placeholder character here (should be just one character long, optional).
-
-          </description>
-      </property>
-      <property key="customMaskChar" type="string" required="false">
-          <caption>Custom mask placeholder</caption>
-          <category>Customizations</category>
-          <description> </description>
-      </property>
-      <property key="customMaskDef" type="string" required="false">
-          <caption>Custom mask definition</caption>
-          <category>Customizations</category>
-          <description>Use the custom mask placeholder with the custom mask definition to define a custom mask.
+        </property>
+        <property key="customPH" type="string" required="false">
+            <caption>Placeholder character</caption>
+            <category>Customizations</category>
+            <description>Underscore is the default mask placeholder character. Define a different placeholder character here (should be just one character long, optional).          </description>
+        </property>
+        <property key="customMaskChar" type="string" required="false">
+            <caption>Custom mask placeholder</caption>
+            <category>Customizations</category>
+            <description></description>
+        </property>
+        <property key="customMaskDef" type="string" required="false">
+            <caption>Custom mask definition</caption>
+            <category>Customizations</category>
+            <description>Use the custom mask placeholder with the custom mask definition to define a custom mask.
 
 For example, if the custom mask placeholder is 'h' (no quotes) and the custom mask definition is '[A-Fa-f0-9]', you can use '#hhhhhh' as a mask for color hex codes (optional).
 
 Documentation can be found at http://digitalbush.com/projects/masked-input-plugin/ .</description>
-      </property>
-      <property key="onleavemf" type="microflow" required="false">
-          <caption>On leave microflow</caption>
-          <category>Customizations</category>
-          <description>The microflow to execute on leave (optional).</description>
-          <returnType type="Void"/>
-      </property>
+        </property>
+        <property key="onleavemf" type="microflow" required="false">
+            <caption>On leave microflow</caption>
+            <category>Customizations</category>
+            <description>The microflow to execute on leave (optional).</description>
+            <returnType type="Void"/>
+        </property>
     </properties>
 </widget>
