@@ -49,6 +49,7 @@ define([
         label: null,
         labelWidth: null,
         inputsNode: null,
+        editable: null,
 
         //CACHES
         _hasStarted: false,
@@ -56,8 +57,6 @@ define([
         divNode: "",
         inputBox: "",
         handle: "",
-        // delay_timer: "", UNUSED
-        currValue: "",
         obj: null,
         maskString: "",
         customPH: "",
@@ -95,6 +94,7 @@ define([
                 .then(dojoLang.hitch(this, this._applyMask))
                 .then(dojoLang.hitch(this, function() {
                     this._resetSubscriptions();
+                    this._updateRendering();
                     if (callback) {
                         callback();
                     }
@@ -139,7 +139,6 @@ define([
                 this.obj.set(this.name, this.inputBox.value);
                 this._executeMicroflow(this.onleavemf);
             }));
-
         },
 
         _executeMicroflow: function(mf) {
@@ -171,6 +170,7 @@ define([
                 } else {
                     dojoProp.set(this.inputBox, "value", this.obj.get(this.name));
                 }
+                this.inputBox.readOnly = this.inputBox.disabled = !this.editable;
             }
 
         },
@@ -210,6 +210,7 @@ define([
                     var val = validations[0],
                         validationText = val.getReasonByAttribute(this.name);
                     if (validationText) {
+                        dojoClass.add(this.domNode, "has-error");
                         this.errorNode.innerText = validationText;
                         dojoStyle.set(this.errorNode, "display", "block");
                     } else {

@@ -20,6 +20,11 @@
             <category>Appearance</category>
             <description>How many (of the 12) columns should the label take up? Leave as 0 to infer the width automagically (based on the previous sibling)</description>
         </property>
+        <property key="editable" type="boolean" defaultValue="true">
+          <caption>Editable</caption>
+          <category>Appearance</category>
+          <description></description>
+        </property>
         <property key="name" type="attribute" required="true">
             <caption>Attribute</caption>
             <category>Settings</category>
