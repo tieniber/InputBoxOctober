@@ -1,12 +1,11 @@
 {
   "name": "InputBoxOctober",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Input box with microflow triggers and configurable masking",
   "license": "Apache 2",
   "author": "MC",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "del": "^2.2.2",
     "gulp": "^3.9.1",
