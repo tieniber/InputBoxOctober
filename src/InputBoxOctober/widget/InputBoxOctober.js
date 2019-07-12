@@ -84,6 +84,9 @@ define([
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function(obj, callback) {
             this.obj = obj;
+            if (obj && this.dynamicPHAttr) {
+                this.inputBox.setAttribute("placeholder", obj.get(this.dynamicPHAttr));
+            }
             this._maskSettings = {
                 placeholder: this.customPH ? this.customPH : undefined
             };
@@ -102,7 +105,9 @@ define([
         },
         _applyMask: function(mask) {
             return new Promise(dojoLang.hitch(this, function(resolve) {
-                $(this.inputBox).mask(mask, this._maskSettings);
+                if (mask) {
+                    $(this.inputBox).mask(mask, this._maskSettings);
+                }
                 resolve();
             }));
         },
@@ -111,7 +116,7 @@ define([
             return new Promise(dojoLang.hitch(this, function(resolve, reject) {
                 if (this.maskString) {
                     resolve(this.maskString);
-                } else if (this.useMicroflowForMask) {
+                } else if (this.useMicroflowForMask && this.microflowName) {
                     mx.data.action({
                         params: {
                             actionname: this.microflowName,
@@ -126,6 +131,8 @@ define([
                             reject(err);
                         }
                     });
+                } else {
+                    resolve('');
                 }
             }));
         },

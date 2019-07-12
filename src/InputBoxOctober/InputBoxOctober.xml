@@ -33,6 +33,14 @@
                 <attributeType name="String"/>
             </attributeTypes>
         </property>
+        <property key="dynamicPHAttr" type="attribute" required="false">
+            <caption>Placeholder attribute</caption>
+            <category>Settings</category>
+            <description>The attribute containing a value to use as a placeholder when the input box is empty.</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>         
         <property key="useMicroflowForMask" type="boolean" required="true" defaultValue="false">
             <caption>Use Dynamic Mask</caption>
             <category>Settings</category>
@@ -59,7 +67,7 @@ In addition, use a question mark to designate optional data - anything after the
             <caption>Placeholder character</caption>
             <category>Customizations</category>
             <description>Underscore is the default mask placeholder character. Define a different placeholder character here (should be just one character long, optional).          </description>
-        </property>
+        </property>       
         <property key="customMaskChar" type="string" required="false">
             <caption>Custom mask placeholder</caption>
             <category>Customizations</category>
